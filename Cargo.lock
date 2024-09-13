@@ -2251,6 +2251,7 @@ dependencies = [
  "axum",
  "candle-core",
  "clap",
+ "csv",
  "ctrlc",
  "data-url",
  "either",

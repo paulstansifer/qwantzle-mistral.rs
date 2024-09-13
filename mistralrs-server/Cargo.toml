@@ -36,6 +36,7 @@ reqwest.workspace = true
 image.workspace = true
 url.workspace = true
 data-url.workspace = true
+csv = "1.1"
 
 [features]
 cuda = ["mistralrs-core/cuda"]

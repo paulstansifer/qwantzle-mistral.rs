@@ -31,6 +31,9 @@ use tracing::{info, warn};
 use utoipa::{OpenApi, ToSchema};
 use utoipa_swagger_ui::SwaggerUi;
 
+mod qwantz;
+use qwantz::qwantz;
+
 // NOTE(EricLBuehler): Accept up to 50mb input
 const N_INPUT_SIZE: usize = 50;
 const MB_TO_B: usize = 1024 * 1024; // 1024 kb in a mb
@@ -90,6 +93,9 @@ struct Args {
     /// Enter vision interactive mode instead of serving a chat server. Exclusive to `--interactive-mode/-i`.
     #[clap(long = "vi", action)]
     vision_interactive_mode: bool,
+
+    #[clap(long, short, action)]
+    qwantz: bool,
 
     /// Number of prefix caches to hold on the device. Other caches are evicted to the CPU based on a LRU strategy.
     #[arg(long, default_value_t = 16)]
@@ -448,6 +454,9 @@ async fn main() -> Result<()> {
         return Ok(());
     } else if args.vision_interactive_mode {
         interactive_mode(builder.build(), true, args.throughput_log).await;
+        return Ok(());
+    } else if args.qwantz {
+        qwantz();
         return Ok(());
     }
 
