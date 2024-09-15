@@ -95,7 +95,7 @@ struct Args {
     vision_interactive_mode: bool,
 
     #[clap(long, short, action)]
-    qwantz: bool,
+    qwantz: Option<String>,
 
     /// Number of prefix caches to hold on the device. Other caches are evicted to the CPU based on a LRU strategy.
     #[arg(long, default_value_t = 16)]
@@ -440,6 +440,12 @@ async fn main() -> Result<()> {
             method: DefaultSchedulerMethod::Fixed(args.max_seqs.try_into().unwrap()),
         }
     };
+
+    if let Some(strips) = args.qwantz {
+        qwantz(pipeline.clone(), strips);
+        return Ok(());
+    }
+
     // Throughput logging in the server
     let builder = MistralRsBuilder::new(pipeline, scheduler_config)
         .with_opt_log(args.log)
@@ -454,9 +460,6 @@ async fn main() -> Result<()> {
         return Ok(());
     } else if args.vision_interactive_mode {
         interactive_mode(builder.build(), true, args.throughput_log).await;
-        return Ok(());
-    } else if args.qwantz {
-        qwantz();
         return Ok(());
     }
 
