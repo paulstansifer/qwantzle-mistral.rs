@@ -542,7 +542,8 @@ impl AnyMoePipelineMixin for AnyMoePipeline {
 
 /// Create a dummy sequence containing just the prompt. This is OK because we just want a sequence that
 /// has no information other than the input tokens (and maybe images).
-fn new_dummy_seq(
+pub fn new_dummy_seq(
+    // (vis HACK)
     tokens: Vec<u32>,
     dummy_sender: tokio::sync::mpsc::Sender<Response>,
     dummy_sampler: Sampler,

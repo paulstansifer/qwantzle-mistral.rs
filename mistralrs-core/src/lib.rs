@@ -49,13 +49,13 @@ mod paged_attention;
 #[cfg(not(all(feature = "cuda", target_family = "unix")))]
 use dummy_paged_attention as paged_attention;
 mod attention;
-mod pipeline;
+pub mod pipeline; // vis HACK
 mod prefix_cacher;
 mod request;
 mod response;
-mod sampler;
+pub mod sampler; // vis HACK
 mod scheduler;
-mod sequence;
+pub mod sequence; // vis HACK
 mod toml_selector;
 mod tools;
 mod topology;

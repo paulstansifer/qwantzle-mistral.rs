@@ -1,9 +1,9 @@
-mod amoe;
+pub mod amoe; //vis HACK
 mod cache_manager;
 pub mod chat_template;
 mod ggml;
 mod gguf;
-mod inputs_processor;
+pub mod inputs_processor; //visibility HACK
 mod isq;
 mod loaders;
 mod macros;
@@ -206,7 +206,8 @@ pub enum ForwardInputsResult {
 }
 
 impl ForwardInputsResult {
-    fn index_bs(&self, bs_idx: usize) -> candle_core::Result<Self> {
+    // visibility HACK
+    pub fn index_bs(&self, bs_idx: usize) -> candle_core::Result<Self> {
         match self {
             Self::CausalGeneration { logits } => Ok(Self::CausalGeneration {
                 logits: logits.i(bs_idx)?,
