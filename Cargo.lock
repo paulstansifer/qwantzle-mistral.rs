@@ -2256,6 +2256,7 @@ dependencies = [
  "data-url",
  "either",
  "futures",
+ "half",
  "image",
  "indexmap",
  "intel-mkl-src",

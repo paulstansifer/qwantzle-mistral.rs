@@ -120,12 +120,49 @@ fn step(pipeline: &mut dyn Pipeline, text: String) {
         let crate::qwantz::ForwardInputsResult::CausalGeneration { logits: l } =
             logits[0].clone().unwrap();
 
-        println!("Logit: {} ", l);
+        print!("result: ");
+
+        // Based on code in sampler.rs:
+        let mut probs: Vec<Vec<half::f16>> = l.to_vec2().expect("### l->v");
+        let mut argsort_indices = (0..probs[0].len()).collect::<Vec<_>>();
+
+        // Sort by descending probability.
+        argsort_indices.sort_unstable_by(|&i, &j| {
+            probs[0][j].partial_cmp(&probs[0][i]).expect("No ordering.")
+        });
+
+        for index in argsort_indices.iter().take(10) {
+            let tok: usize = argsort_indices[*index];
+            let tok_u32: u32 = tok as u32;
+            print!(
+                "{:?} => {}  ",
+                probs[0][*index],
+                pipeline
+                    .tokenizer()
+                    .decode(&[tok_u32], false)
+                    .expect("###t")
+            )
+        }
+        println!();
+        println!();
     }
 }
 
 pub fn qwantz(pipeline: Arc<tokio::sync::Mutex<dyn Pipeline + Send + Sync>>, path: String) -> () {
     let strips = get_strips(path);
+
+    step(&mut *pipeline.try_lock().unwrap(), "".to_owned());
+
+    step(&mut *pipeline.try_lock().unwrap(), "I".to_owned());
+
+    step(&mut *pipeline.try_lock().unwrap(), "I had".to_owned());
+
+    step(&mut *pipeline.try_lock().unwrap(), "I had a".to_owned());
+
+    step(
+        &mut *pipeline.try_lock().unwrap(),
+        "I had a little".to_owned(),
+    );
 
     for strip in strips.iter().take(3) {
         println!("{} ==>> {}", strip.leadup, strip.punchline);
@@ -134,3 +171,10 @@ pub fn qwantz(pipeline: Arc<tokio::sync::Mutex<dyn Pipeline + Send + Sync>>, pat
 }
 
 //cargo run -- --qwantz data/strips.csv plain --model-id Maykeye/TinyLLama-v0
+
+/* metrics to think about
+
+top-p (sum probabilites (sorted) until passing the cutoff)
+min-p (take all probabilites above the cutoff)
+
+*/

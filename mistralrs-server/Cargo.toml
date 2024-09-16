@@ -19,9 +19,9 @@ candle-core.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 axum = { version = "0.7.4", features = ["tokio"] }
-tower-http = { version = "0.5.1", features = ["cors"]}
+tower-http = { version = "0.5.1", features = ["cors"] }
 utoipa = { version = "4.2", features = ["axum_extras"] }
-utoipa-swagger-ui = { version = "7.1.0", features = ["axum"]}
+utoipa-swagger-ui = { version = "7.1.0", features = ["axum"] }
 mistralrs-core = { version = "0.3.0", path = "../mistralrs-core" }
 indexmap.workspace = true
 accelerate-src = { workspace = true, optional = true }
@@ -31,12 +31,13 @@ tracing.workspace = true
 tokio.workspace = true
 either.workspace = true
 clap.workspace = true
-once_cell.workspace=true
+once_cell.workspace = true
 reqwest.workspace = true
 image.workspace = true
 url.workspace = true
 data-url.workspace = true
 csv = "1.1"
+half.workspace = true
 
 [features]
 cuda = ["mistralrs-core/cuda"]
